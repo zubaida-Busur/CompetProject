@@ -3,6 +3,7 @@ package com.busur.sketch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
@@ -26,10 +27,27 @@ public class MainActivity extends AppCompatActivity {
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(getApplicationContext(),MainActivity2.class);
-                startActivity(i);
-                finish();
+
+                if (restorePrefData())
+                {
+                    Intent i = new Intent(getApplicationContext(), mainscreen.class);
+                    startActivity(i);
+                    finish();
+                }
+                else {
+                    Intent i = new Intent(getApplicationContext(), MainActivity2.class);
+                    startActivity(i);
+                    finish();
+                }
             }
         },4000);
+    }
+
+
+    private boolean restorePrefData()
+    {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        Boolean isIntroActivityOpnendBefore = pref.getBoolean("isIntroOpnend", false);
+        return isIntroActivityOpnendBefore;
     }
 }

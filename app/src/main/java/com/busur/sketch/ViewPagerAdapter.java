@@ -11,17 +11,69 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import java.util.List;
+
 public class ViewPagerAdapter extends PagerAdapter {
+
+    Context mContext;
+    List<ScreenItem> mListScreen;
+
+    public ViewPagerAdapter(Context mContext, List<ScreenItem> mListScreen) {
+        this.mContext = mContext;
+        this.mListScreen = mListScreen;
+    }
+
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layoutScreen = inflater.inflate(R.layout.slider_layout, null);
+
+        ImageView imgSlide = layoutScreen.findViewById(R.id.intro_img);
+        TextView title = layoutScreen.findViewById(R.id.intro_title);
+        TextView description = layoutScreen.findViewById(R.id.intro_description);
+
+        title.setText(mListScreen.get(position).getTitle());
+        description.setText(mListScreen.get(position).getDescription());
+        imgSlide.setImageResource(mListScreen.get(position).getScreenImg());
+
+        container.addView(layoutScreen);
+
+        return layoutScreen;
+
+    }
+
+    @Override
+    public int getCount() {
+        return mListScreen.size();
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
+        return view == o;
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+
+        container.removeView((View) object);
+
+
 
     Context context;
 
-    int image[] = {
+    int images[] = {
+
             R.drawable.img1,
             R.drawable.img2,
             R.drawable.img3,
-
+            R.drawable.img3,
+            //why are the images three?
 
     };
+
     int headings[] = {
 
             R.string.heading_one,
@@ -38,46 +90,6 @@ public class ViewPagerAdapter extends PagerAdapter {
             R.string.desc_fourth
     };
 
-
-
-    public ViewPagerAdapter(Context context){
-
-        this.context = context;
-    }
-    @Override
-    public int getCount() {
-
-        return  headings.length;
-    }
-
-    @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view == (LinearLayout) object;
-
-    }
-
-    @NonNull
-    @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
-
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.slider_layout,container,false);
-
-        ImageView slidetitleimage = (ImageView) view.findViewById(R.id.titleImage);
-        TextView slideHeading = (TextView) view.findViewById(R.id.textTitle);
-        TextView slideDesciption = (TextView) view.findViewById(R.id.textdeccription);
-
-        slidetitleimage.setImageResource(image[position]);
-        slideHeading.setText(headings[position]);
-        slideDesciption.setText(description[position]);
-
-        container.addView(view);
-
-        return view;
-    }
-
-    @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((LinearLayout)object);
     }
 }
+
